@@ -32,5 +32,4 @@ public class Board {
         }
         return s;
     }
-
 }

@@ -9,6 +9,6 @@ public class Start {
     public static void main(String[] args) {
         Console console = new Console();
         Board board = new Board();
-        Controller controller = new Controller(board,console);
+        new Controller(board,console);
     }
 }

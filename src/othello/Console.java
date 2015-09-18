@@ -22,7 +22,6 @@ public class Console extends JFrame {
         setupGUI();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-
     }
 
     /**
