@@ -14,11 +14,25 @@ public class Board {
         return playField;
     }
 
-    public void play(int down, int right, int colour) {
+    public boolean isFull(){
+        for (int i = 0; i < 4; i++) {
+
+            for (int j = 0; j < 4; j++) {
+                if(playField[i][j] ==0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean play(int down, int right, int colour) {
         //int colour is who played. 0 means its empty, 1 is black(Player), 2 is white.
         if (playField[down][right] == 0) {
             playField[down][right] = colour;
+            //Return true if the move was made.
+            return true;
         }
+        return false;
     }
 
     public String playFieldToString() {
