@@ -12,8 +12,10 @@ public class Controller {
     public Controller(Board board, Console console){
         this.board= board;
         this.console=console;
+        printBoard();
     }
 
     private void printBoard(){
+    console.appendText(board.playFieldToString());
     }
 }
