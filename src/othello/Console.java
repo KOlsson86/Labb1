@@ -4,19 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * A class that functions as a simple gui to see if anything goes wrong.
+ * A class that functions as a console.
  *
  * @author Sebastian Aspegren.
  */
 public class Console extends JFrame {
 
-    //The text area that prints information about what happens. Basically a console.
-    private JTextArea taServerMessage = new JTextArea();
-    private JScrollPane scrollPane = new JScrollPane(taServerMessage);
+    //The text area that prints information.
+    private JTextArea textArea = new JTextArea();
+    private JScrollPane scrollPane = new JScrollPane(textArea);
     private JPanel pnlServer = new JPanel();
 
     /**
-     * The constructor for the gui. It sets up basic things like the visibility of the gui.
+     * The constructor for the console.
      */
     public Console() {
         setupGUI();
@@ -25,15 +25,14 @@ public class Console extends JFrame {
     }
 
     /**
-     * A method used in the constructor. It sets up everything regarding the gui.
-     * This is in a separate method to easier separate everything.
+     * A method used in the constructor. It sets up everything regarding the console.
      */
     public void setupGUI() {
         setLocation(NORMAL, NORMAL);
         setSize(new Dimension(400, 400));
         setResizable(true);
         setLayout(new GridLayout(1, 1));
-        taServerMessage.setEditable(false);
+        textArea.setEditable(false);
         pnlServer.setLayout(new GridLayout(1, 1));
         pnlServer.add(scrollPane);
         add(pnlServer);
@@ -42,10 +41,10 @@ public class Console extends JFrame {
     /**
      * A method used to write text to the text area taServerMessage.
      *
-     * @param inStr the text we wish to add to the "console".
+     * @param inStr the text we wish to add to the console.
      */
     public void appendText(String inStr) {
-        taServerMessage.append(inStr + "\n");
-        taServerMessage.setCaretPosition(taServerMessage.getDocument().getLength());
+        textArea.append(inStr + "\n");
+        textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 }
