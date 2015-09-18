@@ -14,10 +14,10 @@ public class Board {
         return playField;
     }
 
-    public void play(short val1, short val2, int colour) {
-        //int colour is who played. 0 means its empty, 1 is black, 2 is white.
-        if (playField[val1][val2] == 0) {
-            playField[val1][val2] = colour;
+    public void play(int down, int right, int colour) {
+        //int colour is who played. 0 means its empty, 1 is black(Player), 2 is white.
+        if (playField[down][right] == 0) {
+            playField[down][right] = colour;
         }
     }
 
@@ -32,4 +32,5 @@ public class Board {
         }
         return s;
     }
+
 }
