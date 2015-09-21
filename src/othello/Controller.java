@@ -20,7 +20,7 @@ public class Controller {
     public Controller(Board board, Console console) {
         this.board = board;
         this.console = console;
-        cpu = new AI();
+        cpu = new AI(this);
         play();
     }
 
@@ -40,7 +40,7 @@ public class Controller {
     }
 
     /**
-     *A method representing the computers move.
+     * A method representing the computers move.
      */
     private void cpuPlay() {
         String cpuPlay = cpu.play(board.getPlayField());
@@ -57,8 +57,8 @@ public class Controller {
         while (!board.isFull()) {
             try {
                 playerPlay();
-                if(!board.isFull())
-                cpuPlay();
+                if (!board.isFull())
+                    cpuPlay();
                 printBoard();
             } catch (ArrayIndexOutOfBoundsException ignored) {
                 play();
@@ -71,5 +71,66 @@ public class Controller {
      */
     private void printBoard() {
         console.appendText(board.playFieldToString());
+    }
+
+    /**
+     * Method used by AI to check outcome of a play
+     *
+     * @param down
+     * @param right
+     * @return
+     */
+    public int calcOutcome(int down, int right) {
+        int outcome = 0;
+        if (board.getPlayField()[down][right] != 0) {
+            //If the position is occupied the outcome is irrelevant.
+            return -1;
+        }
+        //----->
+        if (right + 1 < 3 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 2] == 2) {
+            outcome++;
+        } else
+        //----->
+        if (right == 0 && board.getPlayField()[down][right + 2] == 1 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 3] == 2) {
+            outcome += 2;
+        }
+        //<-----
+        if (right - 1 > 0 && board.getPlayField()[down][right - 1] == 1 && board.getPlayField()[down][right - 2] == 2) {
+            outcome++;
+        } else
+        //<-----
+        if (right == 3 && board.getPlayField()[down][right - 1] == 1 && board.getPlayField()[down][right - 2] == 1 && board.getPlayField()[down][right - 3] == 2) {
+            outcome += 2;
+        }
+        //down
+        if (down + 1 < 3 && board.getPlayField()[down + 1][right] == 1 && board.getPlayField()[down + 2][right] == 2) {
+            outcome++;
+        } else
+        //down
+        if (down == 0 && board.getPlayField()[down + 2][right] == 1 && board.getPlayField()[down + 1][right] == 1 && board.getPlayField()[down + 3][right] == 2) {
+            outcome += 2;
+        }
+        //up
+        if (down - 1 > 0 && board.getPlayField()[down - 1][right] == 1 && board.getPlayField()[down - 2][right] == 2) {
+            outcome++;
+        } else
+        //up
+        if (down == 3 && board.getPlayField()[down - 1][right] == 1 && board.getPlayField()[down - 2][right] == 1 && board.getPlayField()[down - 3][right] == 2) {
+            outcome += 2;
+        }
+        return outcome;
+    }
+
+    public int calcCurrentCPUScore() {
+        int score = 0;
+        for (int i = 0; i < 4; i++) {
+
+            for (int j = 0; j < 4; j++) {
+                if (board.getPlayField()[i][j] == 2)
+                    score++;
+            }
+        }
+        System.out.println(score);
+        return score;
     }
 }

@@ -5,8 +5,10 @@ package othello;
  */
 public class AI {
 
-    public AI(){
+    private Controller controller;
 
+    public AI(Controller controller){
+        this.controller=controller;
     }
 
     public void search(){
