@@ -76,16 +76,7 @@ public class Controller {
         console.appendText(board.playFieldToString());
     }
 
-    /**
-     * Method used by AI to check outcome of a play
-     *
-     * @param down
-     * @param right
-     * @return
-     */
     public void flipControlPlayer(int down, int right) {
-        if (board.getPlayField()[down][right] != 0) {
-        }
         //----->
         if (right + 1 < 3 && board.getPlayField()[down][right + 1] == 2 && board.getPlayField()[down][right + 2] == 1) {
             board.flip(down,right+1,1);
@@ -127,8 +118,6 @@ public class Controller {
     }
 
     public void flipControlCPU(int down, int right) {
-        if (board.getPlayField()[down][right] != 0) {
-        }
         //----->
         if (right + 1 < 3 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 2] == 2) {
             board.flip(down,right+1,2);
