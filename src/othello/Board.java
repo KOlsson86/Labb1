@@ -14,7 +14,6 @@ public class Board {
     }
 
     /**
-     *
      * @return The current state of the board. Where all the pieces are etc.
      */
     public int[][] getPlayField() {
@@ -23,13 +22,14 @@ public class Board {
 
     /**
      * A method to check if the board is full. If it isn't the game is still ongoing.
+     *
      * @return false if we find an empty spot, otherwise true.
      */
-    public boolean isFull(){
+    public boolean isFull() {
         for (int i = 0; i < 4; i++) {
 
             for (int j = 0; j < 4; j++) {
-                if(playField[i][j] ==0)
+                if (playField[i][j] == 0)
                     return false;
             }
         }
@@ -38,8 +38,9 @@ public class Board {
 
     /**
      * A method used to place a piece on the board.
-     * @param down how far down the y-axis the piece is placed.
-     * @param right how far to the right on the x-axis the piece is placed.
+     *
+     * @param down   how far down the y-axis the piece is placed.
+     * @param right  how far to the right on the x-axis the piece is placed.
      * @param colour if it is a player or cpu that made the move.
      * @return true if the move was successful, otherwise false.
      */
@@ -55,6 +56,7 @@ public class Board {
 
     /**
      * Method used to print the current board.
+     *
      * @return the current board as a string.
      */
     public String playFieldToString() {
@@ -68,4 +70,13 @@ public class Board {
         }
         return s;
     }
+
+    public void flip(int down, int right, int colour) {
+        if (colour == 1) {
+
+            playField[down][right] = 2;
+        } else
+            playField[down][right] = 1;
+    }
+
 }
