@@ -1,40 +1,130 @@
 package othello;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by Sebastian on 2015-09-18.
  */
 class AI {
 
     private final Controller controller;
- //   private int v;
+    private Node bestNode = null;
 
     public AI(Controller controller) {
         this.controller = controller;
     }
 
 
- //   public String play(int[][] playField) {
- //       myTest(playField);
- //       return "1,1";
- //   }
+    //   public String play(int[][] playField) {
+    //       myTest(playField);
+    //       return "1,1";
+    //   }
 
-    public Coordinate myTest(int[][] playField){
+    public Coordinate myTest(int[][] playField) {
         Coordinate optimalCoordinate = null;
-        int bestOutcome=Integer.MIN_VALUE;
+        int bestOutcome = Integer.MIN_VALUE;
         int outcome;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (playField[i][j] == 0){
-                        outcome= controller.calcOutcome(i,j);
-                        if(outcome>bestOutcome){
-                            optimalCoordinate = new Coordinate(i,j);
-                            bestOutcome=outcome;
-                        }
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (playField[i][j] == 0) {
+                    outcome = controller.calcOutcome(i, j);
+                    if (outcome > bestOutcome) {
+                        optimalCoordinate = new Coordinate(i, j);
+                        bestOutcome = outcome;
                     }
                 }
             }
+        }
         return optimalCoordinate;
     }
+
+
+    public Node alphaBeta(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {
+
+        if (depth == 0 || node.getChildren().isEmpty()) {
+            return bestNode;
+        }
+        if (maximizingPlayer) {
+            Node tempNode = new Node();
+            tempNode.setValue(Integer.MIN_VALUE);
+            for (Node child : node.getChildren()) {
+                if (tempNode.getValue() < alphaBeta(child, depth - 1, alpha, beta, false).getValue()) {
+                    tempNode = child;
+                    bestNode = child;
+                }
+                alpha = Integer.max(alpha, tempNode.getValue());
+                if (beta <= alpha) {
+                    return bestNode;
+                }
+            }
+        } else {
+            Node tempNode = new Node();
+            tempNode.setValue(Integer.MAX_VALUE);
+            for (Node child : node.getChildren()) {
+                if (tempNode.getValue() > alphaBeta(child, depth - 1, alpha, beta, true).getValue()) {
+                    tempNode = child;
+                    bestNode = child;
+                }
+                beta = Integer.min(beta, tempNode.getValue());
+                if (beta <= alpha) {
+                    return bestNode;
+                }
+            }
+        }
+        return bestNode;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    public int miniMax(int[][] playField) {
+
+        return maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+    }
+
+    public int maxVal(int[][] playField, int alpha, int beta) {
+        if (terminalTest()) {
+            return bestCoordinate.getValue();
+        }
+        bestCoordinate.setValue(Integer.MIN_VALUE);
+        ArrayList<Coordinate> coordinates = controller.actions();
+        for (Coordinate coordinate : coordinates) {
+            bestCoordinate.setValue(Integer.max(bestCoordinate.getValue(), minVal(playField, alpha, beta)));
+            if (bestCoordinate.getValue() >= beta) {
+                return bestCoordinate.getValue();
+            }
+            alpha = Integer.max(alpha, bestCoordinate.getValue());
+        }
+        return bestCoordinate.getValue();
+    }
+
+    public int minVal(int[][] playField, int alpha, int beta) {
+
+    }
+
+    public boolean terminalTest() {
+        return controller.actions().isEmpty();
+    }
+
+*/
+
+
+
 
 
 /*

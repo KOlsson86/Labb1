@@ -21,22 +21,6 @@ public class Board {
     }
 
     /**
-     * A method to check if the board is full. If it isn't the game is still ongoing.
-     *
-     * @return false if we find an empty spot, otherwise true.
-     */
-    public boolean isFull() {
-        for (int i = 0; i < 4; i++) {
-
-            for (int j = 0; j < 4; j++) {
-                if (playField[i][j] == 0)
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * A method used to place a piece on the board.
      *
      * @param down   how far down the y-axis the piece is placed.

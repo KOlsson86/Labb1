@@ -1,6 +1,7 @@
 package othello;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  * Created by Sebastian on 2015-09-18.
@@ -35,10 +36,10 @@ public class Controller {
             System.exit(0);
         String[] split = s.split(",");
 
-        if (!board.play(Integer.parseInt(split[0]), Integer.parseInt(split[1]), 1)){
-            playerPlay();}
-        else
-            flipControlPlayer(Integer.parseInt(split[0]),Integer.parseInt(split[1]));
+        if (!board.play(Integer.parseInt(split[0]), Integer.parseInt(split[1]), 1)) {
+            playerPlay();
+        } else
+            flipControlPlayer(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 
     }
 
@@ -46,12 +47,24 @@ public class Controller {
      * A method representing the computers move.
      */
     private void cpuPlay() {
-      //  String cpuPlay = cpu.play(board.getPlayField());
-     //   String[] split2 = cpuPlay.split(",");
-    //    board.play(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]), 2);
+        //  String cpuPlay = cpu.play(board.getPlayField());
+        //   String[] split2 = cpuPlay.split(",");
+        //    board.play(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]), 2);
         Coordinate coordinate = cpu.myTest(board.getPlayField());
         board.play(coordinate.getY(), coordinate.getX(), 2);
-        flipControlCPU(coordinate.getY(),coordinate.getX());
+        flipControlCPU(coordinate.getY(), coordinate.getX());
+    }
+
+    public ArrayList<Coordinate> actions() {
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (board.getPlayField()[i][j] == 0){
+                    coordinates.add(new Coordinate(i,j));
+                }
+            }
+        }
+        return coordinates;
     }
 
     /**
@@ -60,16 +73,31 @@ public class Controller {
      * prompted to play again.
      */
     private void play() {
-        while (!board.isFull()) {
+        while (!isFull()) {
             try {
                 playerPlay();
-                if (!board.isFull())
+                if (!isFull())
                     cpuPlay();
                 printBoard();
             } catch (ArrayIndexOutOfBoundsException ignored) {
                 play();
             }
         }
+    }
+
+    /**
+     * A method to check if the board is full. If it isn't the game is still ongoing.
+     *
+     * @return false if we find an empty spot, otherwise true.
+     */
+    public boolean isFull() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (board.getPlayField()[i][j] == 0)
+                    return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -82,80 +110,80 @@ public class Controller {
     public void flipControlPlayer(int down, int right) {
         //----->
         if (right + 1 < 3 && board.getPlayField()[down][right + 1] == 2 && board.getPlayField()[down][right + 2] == 1) {
-            board.flip(down,right+1,1);
+            board.flip(down, right + 1, 1);
         } else
-        //----->
-        if (right == 0 && board.getPlayField()[down][right + 2] == 2 && board.getPlayField()[down][right + 1] == 2 && board.getPlayField()[down][right + 3] == 1) {
-            board.flip(down,right+1,1);
-            board.flip(down,right+2,1);
-        }
+            //----->
+            if (right == 0 && board.getPlayField()[down][right + 2] == 2 && board.getPlayField()[down][right + 1] == 2 && board.getPlayField()[down][right + 3] == 1) {
+                board.flip(down, right + 1, 1);
+                board.flip(down, right + 2, 1);
+            }
         //<-----
         if (right - 1 > 0 && board.getPlayField()[down][right - 1] == 2 && board.getPlayField()[down][right - 2] == 1) {
-            board.flip(down,right-1,1);
+            board.flip(down, right - 1, 1);
         } else
-        //<-----
-        if (right == 3 && board.getPlayField()[down][right - 1] == 2 && board.getPlayField()[down][right - 2] == 2 && board.getPlayField()[down][right - 3] == 1) {
-            board.flip(down,right-1,1);
-            board.flip(down,right-2,1);
-        }
+            //<-----
+            if (right == 3 && board.getPlayField()[down][right - 1] == 2 && board.getPlayField()[down][right - 2] == 2 && board.getPlayField()[down][right - 3] == 1) {
+                board.flip(down, right - 1, 1);
+                board.flip(down, right - 2, 1);
+            }
         //down
         if (down + 1 < 3 && board.getPlayField()[down + 1][right] == 2 && board.getPlayField()[down + 2][right] == 1) {
-            board.flip(down+1,right,1);
+            board.flip(down + 1, right, 1);
         } else
-        //down
-        if (down == 0 && board.getPlayField()[down + 2][right] == 2 && board.getPlayField()[down + 1][right] == 2 && board.getPlayField()[down + 3][right] == 1) {
-            board.flip(down+1,right,1);
-            board.flip(down+2,right,1);
-        }
+            //down
+            if (down == 0 && board.getPlayField()[down + 2][right] == 2 && board.getPlayField()[down + 1][right] == 2 && board.getPlayField()[down + 3][right] == 1) {
+                board.flip(down + 1, right, 1);
+                board.flip(down + 2, right, 1);
+            }
         //up
         if (down - 1 > 0 && board.getPlayField()[down - 1][right] == 2 && board.getPlayField()[down - 2][right] == 1) {
-            board.flip(down-1,right,1);
+            board.flip(down - 1, right, 1);
         } else
-        //up
-        if (down == 3 && board.getPlayField()[down - 1][right] == 2 && board.getPlayField()[down - 2][right] == 2 && board.getPlayField()[down - 3][right] == 1) {
-            board.flip(down-1,right,1);
-            board.flip(down-2,right,1);
+            //up
+            if (down == 3 && board.getPlayField()[down - 1][right] == 2 && board.getPlayField()[down - 2][right] == 2 && board.getPlayField()[down - 3][right] == 1) {
+                board.flip(down - 1, right, 1);
+                board.flip(down - 2, right, 1);
 
-        }
+            }
 
     }
 
     public void flipControlCPU(int down, int right) {
         //----->
         if (right + 1 < 3 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 2] == 2) {
-            board.flip(down,right+1,2);
+            board.flip(down, right + 1, 2);
         } else
             //----->
             if (right == 0 && board.getPlayField()[down][right + 2] == 1 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 3] == 2) {
-                board.flip(down,right+1,2);
-                board.flip(down,right+2,2);
+                board.flip(down, right + 1, 2);
+                board.flip(down, right + 2, 2);
             }
         //<-----
         if (right - 1 > 0 && board.getPlayField()[down][right - 1] == 1 && board.getPlayField()[down][right - 2] == 2) {
-            board.flip(down,right-1,2);
+            board.flip(down, right - 1, 2);
         } else
             //<-----
             if (right == 3 && board.getPlayField()[down][right - 1] == 1 && board.getPlayField()[down][right - 2] == 1 && board.getPlayField()[down][right - 3] == 2) {
-                board.flip(down,right-1,2);
-                board.flip(down,right-2,2);
+                board.flip(down, right - 1, 2);
+                board.flip(down, right - 2, 2);
             }
         //down
         if (down + 1 < 3 && board.getPlayField()[down + 1][right] == 1 && board.getPlayField()[down + 2][right] == 2) {
-            board.flip(down+1,right,2);
+            board.flip(down + 1, right, 2);
         } else
             //down
             if (down == 0 && board.getPlayField()[down + 2][right] == 1 && board.getPlayField()[down + 1][right] == 1 && board.getPlayField()[down + 3][right] == 2) {
-                board.flip(down+1,right,2);
-                board.flip(down+2,right,2);
+                board.flip(down + 1, right, 2);
+                board.flip(down + 2, right, 2);
             }
         //up
         if (down - 1 > 0 && board.getPlayField()[down - 1][right] == 1 && board.getPlayField()[down - 2][right] == 2) {
-            board.flip(down-1,right,2);
+            board.flip(down - 1, right, 2);
         } else
             //up
             if (down == 3 && board.getPlayField()[down - 1][right] == 1 && board.getPlayField()[down - 2][right] == 1 && board.getPlayField()[down - 3][right] == 2) {
-                board.flip(down-1,right,2);
-                board.flip(down-2,right,2);
+                board.flip(down - 1, right, 2);
+                board.flip(down - 2, right, 2);
 
             }
     }
