@@ -21,6 +21,8 @@ class AI {
     //       return "1,1";
     //   }
 
+
+
     public Coordinate myTest(int[][] playField) {
         Coordinate optimalCoordinate = null;
         int bestOutcome = Integer.MIN_VALUE;
@@ -28,7 +30,7 @@ class AI {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (playField[i][j] == 0) {
-                    outcome = controller.calcOutcome(i, j);
+                    outcome = controller.calcOutcome(controller.getBoard(),i, j);
                     if (outcome > bestOutcome) {
                         optimalCoordinate = new Coordinate(i, j);
                         bestOutcome = outcome;
@@ -38,6 +40,8 @@ class AI {
         }
         return optimalCoordinate;
     }
+
+
 
 
     public Node alphaBeta(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {

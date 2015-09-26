@@ -43,6 +43,11 @@ public class Controller {
 
     }
 
+
+    public int[][] getBoard(){
+        return board.getPlayField();
+    }
+
     /**
      * A method representing the computers move.
      */
@@ -59,8 +64,8 @@ public class Controller {
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (board.getPlayField()[i][j] == 0){
-                    coordinates.add(new Coordinate(i,j));
+                if (board.getPlayField()[i][j] == 0) {
+                    coordinates.add(new Coordinate(i, j));
                 }
             }
         }
@@ -201,42 +206,42 @@ public class Controller {
         return score;
     }
 
-    public int calcOutcome(int down, int right) {
+    public int calcOutcome(int[][] playField, int down, int right) {
         int outcome = 0;
-        if (board.getPlayField()[down][right] != 0) {
+        if (playField[down][right] != 0) {
             //If the position is occupied the outcome is irrelevant.
             return -1;
         }
         //----->
-        if (right + 1 < 3 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 2] == 2) {
+        if (right + 1 < 3 && playField[down][right + 1] == 1 && playField[down][right + 2] == 2) {
             outcome++;
         } else
             //----->
-            if (right == 0 && board.getPlayField()[down][right + 2] == 1 && board.getPlayField()[down][right + 1] == 1 && board.getPlayField()[down][right + 3] == 2) {
+            if (right == 0 && playField[down][right + 2] == 1 && playField[down][right + 1] == 1 && playField[down][right + 3] == 2) {
                 outcome += 2;
             }
         //<-----
-        if (right - 1 > 0 && board.getPlayField()[down][right - 1] == 1 && board.getPlayField()[down][right - 2] == 2) {
+        if (right - 1 > 0 && playField[down][right - 1] == 1 && playField[down][right - 2] == 2) {
             outcome++;
         } else
             //<-----
-            if (right == 3 && board.getPlayField()[down][right - 1] == 1 && board.getPlayField()[down][right - 2] == 1 && board.getPlayField()[down][right - 3] == 2) {
+            if (right == 3 && playField[down][right - 1] == 1 && playField[down][right - 2] == 1 && playField[down][right - 3] == 2) {
                 outcome += 2;
             }
         //down
-        if (down + 1 < 3 && board.getPlayField()[down + 1][right] == 1 && board.getPlayField()[down + 2][right] == 2) {
+        if (down + 1 < 3 && playField[down + 1][right] == 1 && playField[down + 2][right] == 2) {
             outcome++;
         } else
             //down
-            if (down == 0 && board.getPlayField()[down + 2][right] == 1 && board.getPlayField()[down + 1][right] == 1 && board.getPlayField()[down + 3][right] == 2) {
+            if (down == 0 && playField[down + 2][right] == 1 && playField[down + 1][right] == 1 && playField[down + 3][right] == 2) {
                 outcome += 2;
             }
         //up
-        if (down - 1 > 0 && board.getPlayField()[down - 1][right] == 1 && board.getPlayField()[down - 2][right] == 2) {
+        if (down - 1 > 0 && playField[down - 1][right] == 1 && playField[down - 2][right] == 2) {
             outcome++;
         } else
             //up
-            if (down == 3 && board.getPlayField()[down - 1][right] == 1 && board.getPlayField()[down - 2][right] == 1 && board.getPlayField()[down - 3][right] == 2) {
+            if (down == 3 && playField[down - 1][right] == 1 && playField[down - 2][right] == 1 && playField[down - 3][right] == 2) {
                 outcome += 2;
             }
         return outcome;
