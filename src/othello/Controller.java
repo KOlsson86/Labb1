@@ -46,9 +46,12 @@ public class Controller {
      * A method representing the computers move.
      */
     private void cpuPlay() {
-        String cpuPlay = cpu.play(board.getPlayField());
-        String[] split2 = cpuPlay.split(",");
-        board.play(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]), 2);
+      //  String cpuPlay = cpu.play(board.getPlayField());
+     //   String[] split2 = cpuPlay.split(",");
+    //    board.play(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]), 2);
+        Coordinate coordinate = cpu.myTest(board.getPlayField());
+        board.play(coordinate.getY(), coordinate.getX(), 2);
+        flipControlCPU(coordinate.getY(),coordinate.getX());
     }
 
     /**
