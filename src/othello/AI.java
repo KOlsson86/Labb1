@@ -9,104 +9,30 @@ import java.util.ArrayList;
 class AI {
 
     private final Controller controller;
-    private Node bestNode = null;
-    private Coordinate bestCoordinate;
+    private int nodeCounter;
 
     public AI(Controller controller) {
         this.controller = controller;
     }
 
 
-    //   public String play(int[][] playField) {
-    //       myTest(playField);
-    //       return "1,1";
-    //   }
-
-
-    public int myTest(int[][] playField) {
-        Coordinate optimalCoordinate = null;
-        int bestOutcome = Integer.MIN_VALUE;
-        int outcome;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (playField[i][j] == 0) {
-                    outcome = controller.calcOutcome(controller.getBoard(), i, j);
-                    if (outcome > bestOutcome) {
-                        optimalCoordinate = new Coordinate(i, j);
-                        bestOutcome = outcome;
-                    }
-                }
-            }
-        }
-        return bestOutcome;
-    }
-
-
-    public Node alphaBeta(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {
-
-        if (depth == 0 || node.getChildren().isEmpty()) {
-            return bestNode;
-        }
-        if (maximizingPlayer) {
-            Node tempNode = new Node();
-            tempNode.setValue(Integer.MIN_VALUE);
-            for (Node child : node.getChildren()) {
-                if (tempNode.getValue() < alphaBeta(child, depth - 1, alpha, beta, false).getValue()) {
-                    tempNode = child;
-                    bestNode = child;
-                }
-                alpha = Integer.max(alpha, tempNode.getValue());
-                if (beta <= alpha) {
-                    return bestNode;
-                }
-            }
-        } else {
-            Node tempNode = new Node();
-            tempNode.setValue(Integer.MAX_VALUE);
-            for (Node child : node.getChildren()) {
-                if (tempNode.getValue() > alphaBeta(child, depth - 1, alpha, beta, true).getValue()) {
-                    tempNode = child;
-                    bestNode = child;
-                }
-                beta = Integer.min(beta, tempNode.getValue());
-                if (beta <= alpha) {
-                    return bestNode;
-                }
-            }
-        }
-        return bestNode;
-    }
-
-
-//public int alphaBeta(int[][] playfield){
-    //   int v = MaxValue(playfield,Integer.MIN_VALUE,Integer.MAX_VALUE);
-    //  return 0;
-//}
-
-    //  private int MaxValue(int[][] playfield, int alpha, int beta) {
-    //    if(terminalTest(playfield)){
-    //      utility(playfield);
-    // }
-    //int v = Integer.MIN_VALUE;
-
-    // return 0;
-    //}
-
-
-    public int alphaBeta(int[][] playField) {
-        int v = maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public int alphaBeta(int[][] playField, int depth) {
+        int v = maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
+        System.out.println("The search was " + depth + " unit deep");
+        System.out.println(nodeCounter + " nodes visited.");
         return v;
 
     }
 
-    public int maxVal(int[][] playField, int alpha, int beta) {
-        if (terminalTest(playField)) {
+    public int maxVal(int[][] playField, int alpha, int beta, int depth) {
+        if (terminalTest(playField ) || depth == 0) {
             return utility(playField);
         }
         int v = Integer.MIN_VALUE;
         ArrayList<Coordinate> coordinates = controller.actions(playField);
         for (Coordinate coordinate : coordinates) {
-            v = Integer.max(bestCoordinate.getValue(), minVal(Result(playField, coordinate), alpha, beta));
+            nodeCounter++;
+            v = Integer.max(v, minVal(Result(playField, coordinate), alpha, beta, depth-1));
             if (v >= beta) {
                 return v;
             }
@@ -115,14 +41,15 @@ class AI {
         return v;
     }
 
-    private int minVal(int[][] playField, int alpha, int beta) {
-        if (terminalTest(playField)) {
+    private int minVal(int[][] playField, int alpha, int beta, int depth) {
+        if (terminalTest(playField) || depth == 0) {
             return utility(playField);
         }
         int v = Integer.MAX_VALUE;
         ArrayList<Coordinate> coordinates = controller.actions(playField);
         for (Coordinate coordinate : coordinates) {
-            v = Integer.min(v, maxVal(Result(playField, coordinate), alpha, beta));
+            nodeCounter++;
+            v = Integer.min(v, maxVal(Result(playField, coordinate), alpha, beta, depth-1));
             if (v <= alpha) {
                 return v;
             }
@@ -136,7 +63,7 @@ class AI {
     }
 
     private int utility(int[][] playField) {
-        return myTest(playField);
+        return controller.calcCurrentCPUScore(playField);
     }
 
     public boolean terminalTest(int[][] playField) {
@@ -182,5 +109,79 @@ class AI {
         return -1;
     }
     */
+
+
+    /*
+    public Node alphaBeta(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {
+
+        if (depth == 0 || node.getChildren().isEmpty()) {
+            return bestNode;
+        }
+        if (maximizingPlayer) {
+            Node tempNode = new Node();
+            tempNode.setValue(Integer.MIN_VALUE);
+            for (Node child : node.getChildren()) {
+                if (tempNode.getValue() < alphaBeta(child, depth - 1, alpha, beta, false).getValue()) {
+                    tempNode = child;
+                    bestNode = child;
+                }
+                alpha = Integer.max(alpha, tempNode.getValue());
+                if (beta <= alpha) {
+                    return bestNode;
+                }
+            }
+        } else {
+            Node tempNode = new Node();
+            tempNode.setValue(Integer.MAX_VALUE);
+            for (Node child : node.getChildren()) {
+                if (tempNode.getValue() > alphaBeta(child, depth - 1, alpha, beta, true).getValue()) {
+                    tempNode = child;
+                    bestNode = child;
+                }
+                beta = Integer.min(beta, tempNode.getValue());
+                if (beta <= alpha) {
+                    return bestNode;
+                }
+            }
+        }
+        return bestNode;
+    }
+*/
+
+//public int alphaBeta(int[][] playfield){
+    //   int v = MaxValue(playfield,Integer.MIN_VALUE,Integer.MAX_VALUE);
+    //  return 0;
+//}
+
+    //  private int MaxValue(int[][] playfield, int alpha, int beta) {
+    //    if(terminalTest(playfield)){
+    //      utility(playfield);
+    // }
+    //int v = Integer.MIN_VALUE;
+
+    // return 0;
+    //}
+
+
+
+
+    public Coordinate myTest(int[][] playField) {
+        Coordinate optimalCoordinate = null;
+        int bestOutcome = Integer.MIN_VALUE;
+        int outcome;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (playField[i][j] == 0) {
+                    outcome = controller.calcOutcome(controller.getBoard(), i, j);
+                    if (outcome > bestOutcome) {
+                        optimalCoordinate = new Coordinate(i, j);
+                        bestOutcome = outcome;
+                    }
+                }
+            }
+        }
+        return optimalCoordinate;
+    }
+
 }
 
