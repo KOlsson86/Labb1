@@ -60,11 +60,11 @@ public class Controller {
         flipControlCPU(coordinate.getY(), coordinate.getX());
     }
 
-    public ArrayList<Coordinate> actions() {
+    public ArrayList<Coordinate> actions(int[][] playField) {
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (board.getPlayField()[i][j] == 0) {
+                if (playField[i][j] == 0) {
                     coordinates.add(new Coordinate(i, j));
                 }
             }
@@ -191,6 +191,56 @@ public class Controller {
                 board.flip(down - 2, right, 2);
 
             }
+    }
+
+    public int[][] emulateFlip(int[][] playField,int down, int right, int colour) {
+        if (colour == 1) {
+
+            playField[down][right] = 1;
+        } else
+            playField[down][right] = 2;
+        return playField;
+    }
+
+    public int[][] emulateCPUFlip(int[][] playField, int down, int right) {
+        //----->
+        if (right + 1 < 3 && playField[down][right + 1] == 1 && playField[down][right + 2] == 2) {
+          playField =  emulateFlip(playField, down, right + 1, 2);
+        } else
+            //----->
+            if (right == 0 && playField[down][right + 2] == 1 && playField[down][right + 1] == 1 && playField[down][right + 3] == 2) {
+                playField = emulateFlip(playField, down, right + 1, 2);
+                playField =  emulateFlip(playField, down, right + 2, 2);
+            }
+        //<-----
+        if (right - 1 > 0 && playField[down][right - 1] == 1 && playField[down][right - 2] == 2) {
+            playField =emulateFlip(playField, down, right - 1, 2);
+        } else
+            //<-----
+            if (right == 3 && playField[down][right - 1] == 1 && playField[down][right - 2] == 1 && playField[down][right - 3] == 2) {
+                playField = emulateFlip (playField, down, right - 1, 2);
+                playField=  emulateFlip(playField,down, right - 2, 2);
+            }
+        //down
+        if (down + 1 < 3 && playField[down + 1][right] == 1 && playField[down + 2][right] == 2) {
+            playField=  emulateFlip(playField,down + 1, right, 2);
+        } else
+            //down
+            if (down == 0 && playField[down + 2][right] == 1 && playField[down + 1][right] == 1 && playField[down + 3][right] == 2) {
+                playField=  emulateFlip(playField,down + 1, right, 2);
+                playField= emulateFlip(playField,down + 2, right, 2);
+            }
+        //up
+        if (down - 1 > 0 && playField[down - 1][right] == 1 && playField[down - 2][right] == 2) {
+            playField=  emulateFlip(playField,down - 1, right, 2);
+        } else
+            //up
+            if (down == 3 && playField[down - 1][right] == 1 && playField[down - 2][right] == 1 && playField[down - 3][right] == 2) {
+                playField= emulateFlip(playField,down - 1, right, 2);
+                playField=  emulateFlip(playField,down - 2, right, 2);
+
+            }
+        return playField;
     }
 
     public int calcCurrentCPUScore() {

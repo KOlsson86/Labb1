@@ -10,6 +10,7 @@ class AI {
 
     private final Controller controller;
     private Node bestNode = null;
+    private Coordinate bestCoordinate;
 
     public AI(Controller controller) {
         this.controller = controller;
@@ -22,15 +23,14 @@ class AI {
     //   }
 
 
-
-    public Coordinate myTest(int[][] playField) {
+    public int myTest(int[][] playField) {
         Coordinate optimalCoordinate = null;
         int bestOutcome = Integer.MIN_VALUE;
         int outcome;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (playField[i][j] == 0) {
-                    outcome = controller.calcOutcome(controller.getBoard(),i, j);
+                    outcome = controller.calcOutcome(controller.getBoard(), i, j);
                     if (outcome > bestOutcome) {
                         optimalCoordinate = new Coordinate(i, j);
                         bestOutcome = outcome;
@@ -38,10 +38,8 @@ class AI {
                 }
             }
         }
-        return optimalCoordinate;
+        return bestOutcome;
     }
-
-
 
 
     public Node alphaBeta(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {
@@ -80,52 +78,78 @@ class AI {
     }
 
 
+//public int alphaBeta(int[][] playfield){
+    //   int v = MaxValue(playfield,Integer.MIN_VALUE,Integer.MAX_VALUE);
+    //  return 0;
+//}
+
+    //  private int MaxValue(int[][] playfield, int alpha, int beta) {
+    //    if(terminalTest(playfield)){
+    //      utility(playfield);
+    // }
+    //int v = Integer.MIN_VALUE;
+
+    // return 0;
+    //}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    public int miniMax(int[][] playField) {
-
-        return maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public int alphaBeta(int[][] playField) {
+        int v = maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return v;
 
     }
 
     public int maxVal(int[][] playField, int alpha, int beta) {
-        if (terminalTest()) {
-            return bestCoordinate.getValue();
+        if (terminalTest(playField)) {
+            return utility(playField);
         }
-        bestCoordinate.setValue(Integer.MIN_VALUE);
-        ArrayList<Coordinate> coordinates = controller.actions();
+        int v = Integer.MIN_VALUE;
+        ArrayList<Coordinate> coordinates = controller.actions(playField);
         for (Coordinate coordinate : coordinates) {
-            bestCoordinate.setValue(Integer.max(bestCoordinate.getValue(), minVal(playField, alpha, beta)));
-            if (bestCoordinate.getValue() >= beta) {
-                return bestCoordinate.getValue();
+            v = Integer.max(bestCoordinate.getValue(), minVal(Result(playField, coordinate), alpha, beta));
+            if (v >= beta) {
+                return v;
             }
-            alpha = Integer.max(alpha, bestCoordinate.getValue());
+            alpha = Integer.max(alpha, v);
         }
-        return bestCoordinate.getValue();
+        return v;
     }
 
-    public int minVal(int[][] playField, int alpha, int beta) {
-
+    private int minVal(int[][] playField, int alpha, int beta) {
+        if (terminalTest(playField)) {
+            return utility(playField);
+        }
+        int v = Integer.MAX_VALUE;
+        ArrayList<Coordinate> coordinates = controller.actions(playField);
+        for (Coordinate coordinate : coordinates) {
+            v = Integer.min(v, maxVal(Result(playField, coordinate), alpha, beta));
+            if (v <= alpha) {
+                return v;
+            }
+            beta = Integer.min(beta, v);
+        }
+        return v;
     }
 
-    public boolean terminalTest() {
-        return controller.actions().isEmpty();
+    private int[][] Result(int[][] playField, Coordinate coordinate) {
+        return controller.emulateCPUFlip(playField, coordinate.getY(), coordinate.getX());
     }
 
-*/
+    private int utility(int[][] playField) {
+        return myTest(playField);
+    }
+
+    public boolean terminalTest(int[][] playField) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (playField[i][j] == 0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+
 
 
 
