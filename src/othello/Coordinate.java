@@ -6,7 +6,6 @@ package othello;
 public class Coordinate {
     private int Y;
     private int X;
-    private int value;
 
 
     public Coordinate(int Y, int X) {
@@ -21,13 +20,4 @@ public class Coordinate {
     public int getY() {
         return Y;
     }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
 }

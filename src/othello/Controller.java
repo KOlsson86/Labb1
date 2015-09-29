@@ -35,11 +35,7 @@ public class Controller {
         if (s == null)
             System.exit(0);
         String[] split = s.split(",");
-
-        if (!board.play(Integer.parseInt(split[0]), Integer.parseInt(split[1]), 1)) {
-            playerPlay();
-        } else
-            board.flipControlPlayer(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+        emulatePlayerFlip(board.getPlayField(),Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 
     }
 
@@ -47,10 +43,8 @@ public class Controller {
      * A method representing the computers move.
      */
     private void cpuPlay() {
-        int v = cpu.alphaBeta(board.getPlayField(), 6);
-        Coordinate coordinate = actions(board.getPlayField()).get(v);
-        board.play(coordinate.getY(), coordinate.getX(), 2);
-        board.flipControlCPU(coordinate.getY(), coordinate.getX());
+    int i =cpu.alphaBeta(board.getPlayField(),3);
+        System.out.println(i);
     }
 
     public ArrayList<Coordinate> actions(int[][] playField) {
@@ -112,7 +106,7 @@ public class Controller {
         console.appendText(board.playFieldToString());
     }
 
-    public int[][] emulateFlip(int[][] playField, int down, int right, int colour) {
+    private int[][] emulateFlip(int[][] playField, int down, int right, int colour) {
         if (colour == 1) {
 
             playField[down][right] = 1;
@@ -122,7 +116,6 @@ public class Controller {
     }
 
     public int[][] emulateCPUFlip(int[][] playField, int down, int right) {
-        if (playField[down][right] == 0) {
             //----->
             if (right + 1 < 3 && playField[down][right + 1] == 1 && playField[down][right + 2] == 2) {
                 playField = emulateFlip(playField, down, right + 1, 2);
@@ -162,12 +155,10 @@ public class Controller {
 
                 }
             playField[down][right] = 2;
-        }
         return playField;
     }
 
     public int[][] emulatePlayerFlip(int[][] playField, int down, int right) {
-        if (playField[down][right] == 0) {
             //----->
             if (right + 1 < 3 && playField[down][right + 1] == 2 && playField[down][right + 2] == 1) {
                 playField = emulateFlip(playField, down, right + 1, 1);
@@ -207,7 +198,6 @@ public class Controller {
 
                 }
             playField[down][right] = 1;
-        }
         return playField;
     }
 
@@ -221,5 +211,24 @@ public class Controller {
             }
         }
         return score;
+    }
+
+    public int calcCurrentPlayerScore(int[][] playField) {
+        int score = 0;
+        for (int i = 0; i < 4; i++) {
+
+            for (int j = 0; j < 4; j++) {
+                if (playField[i][j] == 1)
+                    score++;
+            }
+        }
+        return score;
+
+    }
+
+
+
+    public int[][] getPlayField() {
+        return board.getPlayField();
     }
 }
