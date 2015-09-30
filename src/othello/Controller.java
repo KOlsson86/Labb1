@@ -36,14 +36,13 @@ public class Controller {
             System.exit(0);
         String[] split = s.split(",");
         emulatePlayerFlip(board.getPlayField(), Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-
     }
 
     /**
      * A method representing the computers move.
      */
     private void cpuPlay() {
-        Coordinate coordinate = cpu.alphaBeta(board.getPlayField(), 12);
+        Coordinate coordinate = cpu.alphaBeta(board.getPlayField());
         emulateCPUFlip(board.getPlayField(), coordinate.getY(), coordinate.getX());
     }
 
@@ -61,7 +60,7 @@ public class Controller {
 
     /**
      * A method representing the majority of the game.
-     * While the board isnt full the game continues. If the player attempt to put a piece outside the board he is
+     * While the board isn't full the game continues. If the player attempt to put a piece outside the board he is
      * prompted to play again.
      */
     private void play() {
@@ -75,6 +74,14 @@ public class Controller {
                 play();
             }
         }
+        int cpuScore = calcCurrentCPUScore(board.getPlayField());
+        int playerScore = calcCurrentPlayerScore(board.getPlayField());
+        if(cpuScore > playerScore){
+            System.out.println("The computer won. Try again...");
+        } else if(cpuScore < playerScore){
+            System.out.println("Holy shit, you actually won!");
+        } else
+            System.out.println("Draw. Nobody is happy.");
     }
 
     /**
@@ -108,7 +115,6 @@ public class Controller {
 
     private int[][] emulateFlip(int[][] playField, int down, int right, int colour) {
         if (colour == 1) {
-
             playField[down][right] = 1;
         } else
             playField[down][right] = 2;
@@ -152,8 +158,46 @@ public class Controller {
             if (down == 3 && playField[down - 1][right] == 1 && playField[down - 2][right] == 1 && playField[down - 3][right] == 2) {
                 playField = emulateFlip(playField, down - 1, right, 2);
                 playField = emulateFlip(playField, down - 2, right, 2);
-
             }
+
+        //Diagonal
+
+        if (right + 1 < 3 && down - 1 > 0 && playField[down - 1][right + 1] == 1 && playField[down - 2][right + 2] == 2) {
+            playField = emulateFlip(playField, down - 1, right + 1, 2);
+        }
+
+        if (right == 0 && down == 3 && playField[down - 2][right + 2] == 1 && playField[down + 1][right + 1] == 1 && playField[down - 3][right + 3] == 2) {
+            playField = emulateFlip(playField, down - 1, right + 1, 2);
+            playField = emulateFlip(playField, down - 2, right + 2, 2);
+        }
+
+        if (right - 1 > 0 && down + 1 < 3 && playField[down + 1][right - 1] == 1 && playField[down + 2][right - 2] == 2) {
+            playField = emulateFlip(playField, down + 1, right - 1, 2);
+        }
+
+        if (right == 3 && down == 0 && playField[down + 1][right - 1] == 1 && playField[down + 2][right - 2] == 1 && playField[down + 3][right - 3] == 2) {
+            playField = emulateFlip(playField, down + 1, right - 1, 2);
+            playField = emulateFlip(playField, down + 2, right - 2, 2);
+        }
+
+        if (down + 1 < 3 && right + 1 < 3 && playField[down + 1][right + 1] == 1 && playField[down + 2][right + 2] == 2) {
+            playField = emulateFlip(playField, down + 1, right + 1, 2);
+        }
+        //down
+        if (down == 0 && right == 0 && playField[down + 2][right + 2] == 1 && playField[down + 1][right + 1] == 1 && playField[down + 3][right + 3] == 2) {
+            playField = emulateFlip(playField, down + 1, right + 1, 2);
+            playField = emulateFlip(playField, down + 2, right + 2, 2);
+        }
+
+        if (down - 1 > 0 && right - 1 > 0 && playField[down - 1][right - 1] == 1 && playField[down - 2][right - 2] == 2) {
+            playField = emulateFlip(playField, down - 1, right - 1, 2);
+        }
+        //up
+        if (down == 3 && right == 3 && playField[down - 1][right - 1] == 1 && playField[down - 2][right - 2] == 1 && playField[down - 3][right - 3] == 2) {
+            playField = emulateFlip(playField, down - 1, right - 1, 2);
+            playField = emulateFlip(playField, down - 2, right - 2, 2);
+        }
+
         playField[down][right] = 2;
         return playField;
     }
@@ -197,6 +241,45 @@ public class Controller {
                 playField = emulateFlip(playField, down - 2, right, 1);
 
             }
+
+        //Diagonal
+
+        if (right + 1 < 3 && down - 1 > 0 && playField[down - 1][right + 1] == 2 && playField[down - 2][right + 2] == 1) {
+            playField = emulateFlip(playField, down - 1, right + 1, 1);
+        }
+
+        if (right == 0 && down == 3 && playField[down - 2][right + 2] == 2 && playField[down + 1][right + 1] == 2 && playField[down - 3][right + 3] == 1) {
+            playField = emulateFlip(playField, down - 1, right + 1, 1);
+            playField = emulateFlip(playField, down - 2, right + 2, 1);
+        }
+
+        if (right - 1 > 0 && down + 1 < 3 && playField[down + 1][right - 1] == 2 && playField[down + 2][right - 2] == 1) {
+            playField = emulateFlip(playField, down + 1, right - 1, 1);
+        }
+
+        if (right == 3 && down == 0 && playField[down + 1][right - 1] == 2 && playField[down + 2][right - 2] == 2 && playField[down + 3][right - 3] == 1) {
+            playField = emulateFlip(playField, down + 1, right - 1, 1);
+            playField = emulateFlip(playField, down + 2, right - 2, 1);
+        }
+
+        if (down + 1 < 3 && right + 1 < 3 && playField[down + 1][right + 1] == 2 && playField[down + 2][right + 2] == 1) {
+            playField = emulateFlip(playField, down + 1, right + 1, 1);
+        }
+        //down
+        if (down == 0 && right == 0 && playField[down + 2][right + 2] == 2 && playField[down + 1][right + 1] == 2 && playField[down + 3][right + 3] == 1) {
+            playField = emulateFlip(playField, down + 1, right + 1, 1);
+            playField = emulateFlip(playField, down + 2, right + 2, 1);
+        }
+
+        if (down - 1 > 0 && right - 1 > 0 && playField[down - 1][right - 1] == 2 && playField[down - 2][right - 2] == 1) {
+            playField = emulateFlip(playField, down - 1, right - 1, 1);
+        }
+        //up
+        if (down == 3 && right == 3 && playField[down - 1][right - 1] == 2 && playField[down - 2][right - 2] == 2 && playField[down - 3][right - 3] == 1) {
+            playField = emulateFlip(playField, down - 1, right - 1, 1);
+            playField = emulateFlip(playField, down - 2, right - 2, 1);
+        }
+
         playField[down][right] = 1;
         return playField;
     }
@@ -224,10 +307,5 @@ public class Controller {
         }
         return score;
 
-    }
-
-
-    public int[][] getPlayField() {
-        return board.getPlayField();
     }
 }

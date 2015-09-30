@@ -5,10 +5,9 @@ package othello;
  */
 public class Start {
 
-
     public static void main(String[] args) {
         Console console = new Console();
         Board board = new Board();
-        new Controller(board,console);
+        new Controller(board, console);
     }
 }

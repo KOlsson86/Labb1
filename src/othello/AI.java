@@ -10,46 +10,39 @@ class AI {
     private final Controller controller;
     private int nodeCounter;
     private Coordinate bestCoordinate;
-    private int depthCounter=0;
 
     public AI(Controller controller) {
         this.controller = controller;
     }
 
-
-    public Coordinate alphaBeta(int[][] playField, int depth) {
+    public Coordinate alphaBeta(int[][] playField) {
         bestCoordinate = null;
-        if(obviousOptimal(playField)) {
+        if (obviousOptimal(playField)) {
             System.out.println("A corner is free. Let's grab it!");
 
         } else {
             nodeCounter = 0;
-            int v = maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
+            int v = maxVal(playField, Integer.MIN_VALUE, Integer.MAX_VALUE);
             System.out.println("V = " + v);
-            depth = 12 - (depthCounter*2);
+            int depth = controller.actions(playField).size()+1;
             System.out.println("The search was " + depth + " units deep");
-            depthCounter++;
             System.out.println(nodeCounter + " nodes visited.");
             if (bestCoordinate == null) {
                 playAnything(playField);
             }
         }
-
-
-
         return bestCoordinate;
-
     }
 
-    public int maxVal(int[][] playField, int alpha, int beta, int depth) {
-        if (terminalTest(playField) || depth == 0) {
+    public int maxVal(int[][] playField, int alpha, int beta) {
+        if (terminalTest(playField)) {
             return utility(playField);
         }
         int v = Integer.MIN_VALUE;
         ArrayList<Coordinate> coordinates = controller.actions(playField);
         for (Coordinate coordinate : coordinates) {
             nodeCounter++;
-            v = Integer.max(v, minVal(ResultMax(playField, coordinate), alpha, beta, depth - 1));
+            v = Integer.max(v, minVal(ResultMax(playField, coordinate), alpha, beta));
             if (v >= beta) {
                 bestCoordinate = coordinate;
                 return v;
@@ -59,15 +52,15 @@ class AI {
         return v;
     }
 
-    private int minVal(int[][] playField, int alpha, int beta, int depth) {
-        if (terminalTest(playField) || depth == 0) {
+    private int minVal(int[][] playField, int alpha, int beta) {
+        if (terminalTest(playField)) {
             return utility(playField);
         }
         int v = Integer.MAX_VALUE;
         ArrayList<Coordinate> coordinates = controller.actions(playField);
         for (Coordinate coordinate : coordinates) {
             nodeCounter++;
-            v = Integer.min(v, maxVal(ResultMin(playField, coordinate), alpha, beta, depth - 1));
+            v = Integer.min(v, maxVal(ResultMin(playField, coordinate), alpha, beta));
             if (v <= alpha) {
                 return v;
             }
@@ -106,7 +99,6 @@ class AI {
                 if (playField[i][j] == 0) {
                     bestCoordinate = new Coordinate(i, j);
                 }
-
             }
         }
     }
@@ -115,10 +107,10 @@ class AI {
 
         if (playField[0][0] == 0) {
             bestCoordinate = new Coordinate(0, 0);
-        return true;
+            return true;
         } else if (playField[0][3] == 0) {
             bestCoordinate = new Coordinate(0, 3);
-return true;
+            return true;
         } else if (playField[3][0] == 0) {
             bestCoordinate = new Coordinate(3, 0);
             return true;
