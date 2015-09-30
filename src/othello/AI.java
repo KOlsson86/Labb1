@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Sebastian on 2015-09-18.
+ * A class representing the computer component.
+ * It uses alpha beta pruning to find the optimal move then returns the coordinate of that move.
  */
 class AI {
 
@@ -34,7 +36,7 @@ class AI {
         return bestCoordinate;
     }
 
-    public int maxVal(int[][] playField, int alpha, int beta) {
+    private int maxVal(int[][] playField, int alpha, int beta) {
         if (terminalTest(playField)) {
             return utility(playField);
         }
@@ -83,7 +85,7 @@ class AI {
         return controller.calcCurrentCPUScore(playField);
     }
 
-    public boolean terminalTest(int[][] playField) {
+    private boolean terminalTest(int[][] playField) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (playField[i][j] == 0)
@@ -93,7 +95,7 @@ class AI {
         return true;
     }
 
-    public void playAnything(int[][] playField) {
+    private void playAnything(int[][] playField) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (playField[i][j] == 0) {
@@ -103,7 +105,7 @@ class AI {
         }
     }
 
-    public boolean obviousOptimal(int[][] playField) {
+    private boolean obviousOptimal(int[][] playField) {
 
         if (playField[0][0] == 0) {
             bestCoordinate = new Coordinate(0, 0);

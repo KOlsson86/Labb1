@@ -2,9 +2,10 @@ package othello;
 
 /**
  * Created by Sebastian on 2015-09-18.
+ * A class representing the board from a 4x4 othello.
  */
-public class Board {
-    private int[][] playField;
+class Board {
+    private final int[][] playField;
 
     /**
      * The constructor for the board. It initiates a board that is 4x4.

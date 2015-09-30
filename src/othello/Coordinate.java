@@ -2,10 +2,11 @@ package othello;
 
 /**
  * Created by Sebastian on 2015-09-26.
+ * A data structure representing a coordinate.
  */
 public class Coordinate {
-    private int Y;
-    private int X;
+    private final int Y;
+    private final int X;
 
     public Coordinate(int Y, int X) {
         this.Y = Y;

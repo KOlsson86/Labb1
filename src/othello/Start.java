@@ -2,8 +2,9 @@ package othello;
 
 /**
  * Created by Sebastian on 2015-09-18.
+ * The class that initiates the program.
  */
-public class Start {
+class Start {
 
     public static void main(String[] args) {
         Console console = new Console();

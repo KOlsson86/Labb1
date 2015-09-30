@@ -5,12 +5,13 @@ import java.util.ArrayList;
 
 /**
  * Created by Sebastian on 2015-09-18.
+ * The controller class containing most logic operations.
  */
-public class Controller {
+class Controller {
 
-    private Console console;
-    private Board board;
-    private AI cpu;
+    private final Console console;
+    private final Board board;
+    private final AI cpu;
 
     /**
      * The constructor for the controller.
@@ -31,11 +32,23 @@ public class Controller {
      * If the user press cancel the game will turn itself off.
      */
     private void playerPlay() {
-        String s = JOptionPane.showInputDialog("Where do you want to place your piece? (3,3 for example)");
-        if (s == null)
-            System.exit(0);
-        String[] split = s.split(",");
-        emulatePlayerFlip(board.getPlayField(), Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+        try {
+            String s = JOptionPane.showInputDialog("Where do you want to place your piece? (3,3 for example)");
+            if (s == null)
+                System.exit(0);
+            String[] split = s.split(",");
+            int Y = Integer.parseInt(split[0]);
+            int X = Integer.parseInt(split[1]);
+
+            if (board.getPlayField()[Y][X] == 0) {
+                emulatePlayerFlip(board.getPlayField(), Y, X);
+            } else {
+                playerPlay();
+            }
+            //In case the player types in text, a number that's too high etc.
+        } catch (Exception ignored) {
+            playerPlay();
+        }
     }
 
     /**
@@ -64,21 +77,17 @@ public class Controller {
      * prompted to play again.
      */
     private void play() {
-        while (!isFull()) {
-            try {
-                playerPlay();
-                if (!isFull())
-                    cpuPlay();
-                printBoard();
-            } catch (ArrayIndexOutOfBoundsException ignored) {
-                play();
-            }
+        while (notFull()) {
+            playerPlay();
+            if (notFull())
+                cpuPlay();
+            printBoard();
         }
         int cpuScore = calcCurrentCPUScore(board.getPlayField());
         int playerScore = calcCurrentPlayerScore(board.getPlayField());
-        if(cpuScore > playerScore){
+        if (cpuScore > playerScore) {
             System.out.println("The computer won. Try again...");
-        } else if(cpuScore < playerScore){
+        } else if (cpuScore < playerScore) {
             System.out.println("Holy shit, you actually won!");
         } else
             System.out.println("Draw. Nobody is happy.");
@@ -89,14 +98,14 @@ public class Controller {
      *
      * @return false if we find an empty spot, otherwise true.
      */
-    public boolean isFull() {
+    private boolean notFull() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (board.getPlayField()[i][j] == 0)
-                    return false;
+                    return true;
             }
         }
-        return true;
+        return false;
     }
 
     public int[][] copyArray(int[][] oldArray, int[][] newArray) {
@@ -166,7 +175,7 @@ public class Controller {
             playField = emulateFlip(playField, down - 1, right + 1, 2);
         }
 
-        if (right == 0 && down == 3 && playField[down - 2][right + 2] == 1 && playField[down + 1][right + 1] == 1 && playField[down - 3][right + 3] == 2) {
+        if (right == 0 && down == 3 && playField[down - 2][right + 2] == 1 && playField[down - 1][right + 1] == 1 && playField[down - 3][right + 3] == 2) {
             playField = emulateFlip(playField, down - 1, right + 1, 2);
             playField = emulateFlip(playField, down - 2, right + 2, 2);
         }
@@ -248,7 +257,7 @@ public class Controller {
             playField = emulateFlip(playField, down - 1, right + 1, 1);
         }
 
-        if (right == 0 && down == 3 && playField[down - 2][right + 2] == 2 && playField[down + 1][right + 1] == 2 && playField[down - 3][right + 3] == 1) {
+        if (right == 0 && down == 3 && playField[down - 2][right + 2] == 2 && playField[down - 1][right + 1] == 2 && playField[down - 3][right + 3] == 1) {
             playField = emulateFlip(playField, down - 1, right + 1, 1);
             playField = emulateFlip(playField, down - 2, right + 2, 1);
         }
@@ -296,7 +305,7 @@ public class Controller {
         return score;
     }
 
-    public int calcCurrentPlayerScore(int[][] playField) {
+    private int calcCurrentPlayerScore(int[][] playField) {
         int score = 0;
         for (int i = 0; i < 4; i++) {
 

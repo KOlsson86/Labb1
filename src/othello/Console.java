@@ -8,18 +8,19 @@ import java.awt.*;
  *
  * @author Sebastian Aspegren.
  */
-public class Console extends JFrame {
+class Console extends JFrame {
 
     //The text area that prints information.
-    private JTextArea textArea = new JTextArea();
-    private JScrollPane scrollPane = new JScrollPane(textArea);
-    private JPanel pnlServer = new JPanel();
+    private final JTextArea textArea = new JTextArea();
+    private final JScrollPane scrollPane = new JScrollPane(textArea);
+    private final JPanel pnlServer = new JPanel();
 
     /**
      * The constructor for the console.
      */
     public Console() {
         setupGUI();
+        //noinspection MagicConstant
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -27,7 +28,7 @@ public class Console extends JFrame {
     /**
      * A method used in the constructor. It sets up everything regarding the console.
      */
-    public void setupGUI() {
+    private void setupGUI() {
         setLocation(NORMAL, NORMAL);
         setSize(new Dimension(400, 400));
         setResizable(true);
